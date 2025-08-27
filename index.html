@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebApp Interativa: A Educação na Constituição</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony (Stone, Teal, Amber) -->
+    <!-- Application Structure Plan: A thematic dashboard structure with 6 sections (Overview, Principles, Duties, Funding, Organization, PNE). This non-linear design is chosen over a simple text layout to enhance user engagement and facilitate quick access to specific topics, which is ideal for exam preparation. Key interactions include click-to-reveal details for principles and a dynamic chart for funding data to make complex information more digestible. -->
+    <!-- Visualization & Content Choices: Funding Percentages (Art. 212) -> Goal: Compare -> Viz: Chart.js Bar Chart -> Interaction: Hover tooltips -> Justification: Visually contrasts the investment levels of different government spheres, aiding memorization. Principles (Art. 206) -> Goal: Organize/Inform -> Method: Interactive HTML/CSS Grid -> Interaction: Click-to-reveal -> Justification: Reduces initial cognitive load and encourages active exploration of the 9 principles. Organization (Art. 211) -> Goal: Organize -> Method: HTML/CSS Flexbox Diagram -> Interaction: Static -> Justification: Provides a clear visual map of responsibilities, which is more intuitive than text alone. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .principle-card.active {
+            border-color: #f59e0b; /* amber-500 */
+            background-color: #fffbeb; /* amber-50 */
+        }
+        .principle-detail {
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .principle-card.active .principle-detail {
+            max-height: 200px;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-2">
+                    <span class="text-2xl text-teal-700">📚</span>
+                    <h1 class="text-xl font-bold text-teal-800">Educação na Constituição</h1>
+                </div>
+                <div class="hidden md:flex space-x-6 text-sm font-medium">
+                    <a href="#visao-geral" class="text-slate-600 hover:text-teal-700 transition">Visão Geral</a>
+                    <a href="#principios" class="text-slate-600 hover:text-teal-700 transition">Princípios</a>
+                    <a href="#deveres" class="text-slate-600 hover:text-teal-700 transition">Deveres</a>
+                    <a href="#financiamento" class="text-slate-600 hover:text-teal-700 transition">Financiamento</a>
+                    <a href="#organizacao" class="text-slate-600 hover:text-teal-700 transition">Organização</a>
+                    <a href="#pne" class="text-slate-600 hover:text-teal-700 transition">PNE</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+        <!-- Seção 1: Visão Geral (Art. 205) -->
+        <section id="visao-geral" class="mb-16">
+            <h2 class="text-3xl font-bold text-teal-800 mb-2 text-center">Visão Geral: O Pilar da Educação</h2>
+            <p class="text-center text-slate-600 max-w-3xl mx-auto mb-8">O Artigo 205 da Constituição Federal estabelece a base da educação no Brasil, definindo-a como um direito fundamental e um dever compartilhado. Esta seção apresenta os três pilares que sustentam essa visão: o direito, o dever e as finalidades da educação.</p>
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-teal-500">
+                    <h3 class="text-xl font-bold text-teal-800 mb-2">Direito de Todos</h3>
+                    <p class="text-slate-600">A educação é um direito social universal, inalienável e intransferível, garantido a cada cidadão sem qualquer distinção.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-amber-500">
+                    <h3 class="text-xl font-bold text-amber-800 mb-2">Dever do Estado e da Família</h3>
+                    <p class="text-slate-600">A responsabilidade pela educação é compartilhada, com o Estado garantindo a oferta e a família assegurando o acesso e o acompanhamento.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-sky-500">
+                    <h3 class="text-xl font-bold text-sky-800 mb-2">Finalidades</h3>
+                    <p class="text-slate-600">Visa ao pleno desenvolvimento da pessoa, seu preparo para o exercício da cidadania e sua qualificação para o trabalho.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção 2: Princípios do Ensino (Art. 206) -->
+        <section id="principios" class="mb-16">
+            <h2 class="text-3xl font-bold text-teal-800 mb-2 text-center">Princípios do Ensino</h2>
+            <p class="text-center text-slate-600 max-w-3xl mx-auto mb-8">O Artigo 206 detalha os princípios que norteiam o ensino no Brasil, tanto na rede pública quanto na privada. Clique em cada princípio para ver uma breve explicação e entender como eles moldam o sistema educacional.</p>
+            <div id="principles-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            </div>
+        </section>
+
+        <!-- Seção 3: Deveres do Estado (Art. 208) -->
+        <section id="deveres" class="mb-16">
+            <h2 class="text-3xl font-bold text-teal-800 mb-2 text-center">Deveres do Estado com a Educação</h2>
+             <p class="text-center text-slate-600 max-w-3xl mx-auto mb-8">Para efetivar o direito à educação, o Artigo 208 estabelece garantias e deveres específicos para o Estado. Explore os principais deveres que o Poder Público deve assegurar a todos os cidadãos.</p>
+            <div class="bg-white p-8 rounded-xl shadow-md">
+                <ul class="space-y-4">
+                    <li class="flex items-start space-x-4">
+                        <span class="text-2xl text-teal-600 mt-1">✅</span>
+                        <div>
+                            <h4 class="font-bold text-lg">Educação Básica Obrigatória e Gratuita</h4>
+                            <p class="text-slate-600">Dos 4 aos 17 anos, incluindo sua oferta gratuita para todos que não tiveram acesso na idade própria.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start space-x-4">
+                        <span class="text-2xl text-teal-600 mt-1">♿</span>
+                        <div>
+                            <h4 class="font-bold text-lg">Atendimento Educacional Especializado (AEE)</h4>
+                            <p class="text-slate-600">Preferencialmente na rede regular de ensino, para pessoas com deficiência.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start space-x-4">
+                        <span class="text-2xl text-teal-600 mt-1">👶</span>
+                        <div>
+                            <h4 class="font-bold text-lg">Educação Infantil</h4>
+                            <p class="text-slate-600">Garantia de atendimento em creche e pré-escola para crianças de até 5 anos de idade.</p>
+                        </div>
+                    </li>
+                     <li class="flex items-start space-x-4">
+                        <span class="text-2xl text-teal-600 mt-1">🌙</span>
+                        <div>
+                            <h4 class="font-bold text-lg">Ensino Noturno Regular</h4>
+                            <p class="text-slate-600">Oferta de ensino noturno adequado às condições do estudante, especialmente o trabalhador.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start space-x-4">
+                        <span class="text-2xl text-teal-600 mt-1">🚌</span>
+                        <div>
+                            <h4 class="font-bold text-lg">Programas Suplementares</h4>
+                            <p class="text-slate-600">Atendimento ao educando em todas as etapas da educação básica com material didático, transporte, alimentação e assistência à saúde.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Seção 4: Financiamento (Arts. 212 & 212-A) -->
+        <section id="financiamento" class="mb-16">
+            <h2 class="text-3xl font-bold text-teal-800 mb-2 text-center">O Financiamento da Educação</h2>
+            <p class="text-center text-slate-600 max-w-3xl mx-auto mb-8">O financiamento é vital para a manutenção e o desenvolvimento do ensino. Os Artigos 212 e 212-A definem os percentuais mínimos de investimento e criam o FUNDEB, um fundo permanente para a educação básica. Veja os números-chave.</p>
+            <div class="grid lg:grid-cols-2 gap-8 items-center">
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-semibold mb-4 text-center">Investimento Mínimo (Art. 212)</h3>
+                    <div class="chart-container">
+                        <canvas id="fundingChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md space-y-6">
+                    <h3 class="text-xl font-semibold text-center text-teal-800">FUNDEB Permanente (Art. 212-A)</h3>
+                    <div class="text-center">
+                        <p class="text-5xl font-bold text-teal-600">23%</p>
+                        <p class="text-slate-600 mt-1">Complementação mínima da União ao fundo.</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-5xl font-bold text-amber-600">70%</p>
+                        <p class="text-slate-600 mt-1">Mínimo de cada fundo para pagamento dos profissionais da educação básica.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção 5: Organização e Colaboração (Art. 211) -->
+        <section id="organizacao" class="mb-16">
+            <h2 class="text-3xl font-bold text-teal-800 mb-2 text-center">Organização e Regime de Colaboração</h2>
+            <p class="text-center text-slate-600 max-w-3xl mx-auto mb-8">A educação no Brasil é organizada em um regime de colaboração entre os entes federativos. O Artigo 211 define as responsabilidades prioritárias de cada um para garantir a oferta em todos os níveis.</p>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-md text-center border-t-4 border-sky-500">
+                    <h3 class="text-xl font-bold text-sky-800 mb-2">Municípios</h3>
+                    <p class="text-slate-600 font-medium">Atuação prioritária na <strong class="text-sky-700">Educação Infantil</strong> e no <strong class="text-sky-700">Ensino Fundamental</strong>.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md text-center border-t-4 border-teal-500">
+                    <h3 class="text-xl font-bold text-teal-800 mb-2">Estados e DF</h3>
+                    <p class="text-slate-600 font-medium">Atuação prioritária no <strong class="text-teal-700">Ensino Fundamental</strong> e <strong class="text-teal-700">Médio</strong>.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md text-center border-t-4 border-amber-500">
+                    <h3 class="text-xl font-bold text-amber-800 mb-2">União</h3>
+                    <p class="text-slate-600 font-medium">Organiza o sistema federal e exerce função <strong class="text-amber-700">redistributiva e supletiva</strong>, prestando assistência técnica e financeira.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção 6: Plano Nacional de Educação (PNE - Art. 214) -->
+        <section id="pne">
+            <h2 class="text-3xl font-bold text-teal-800 mb-2 text-center">Plano Nacional de Educação (PNE)</h2>
+            <p class="text-center text-slate-600 max-w-3xl mx-auto mb-8">O Artigo 214 determina a criação de um plano de longo prazo para a educação. O PNE é a ferramenta que define diretrizes, metas e estratégias para o desenvolvimento do ensino no país.</p>
+            <div class="bg-white p-8 rounded-xl shadow-md grid md:grid-cols-2 gap-8 items-center">
+                <div class="text-center">
+                    <p class="text-6xl font-bold text-teal-600">10</p>
+                    <p class="text-xl font-semibold text-slate-700">Anos de Duração</p>
+                    <p class="text-slate-600 mt-1">(Plano Decenal)</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-2">Principais Objetivos Constitucionais:</h4>
+                    <ul class="list-disc list-inside text-slate-600 space-y-1">
+                        <li>Erradicação do analfabetismo</li>
+                        <li>Universalização do atendimento escolar</li>
+                        <li>Melhoria da qualidade do ensino</li>
+                        <li>Formação para o trabalho</li>
+                        <li>Promoção humanística, científica e tecnológica</li>
+                        <li>Meta de investimento em proporção do PIB</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="bg-slate-800 text-white mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center">
+            <p class="text-sm text-slate-400">WebApp Interativa criada com base no material "Educação na Constituição".</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            const principlesData = [
+                { title: "I. Igualdade", detail: "Garante condições iguais para o acesso e a permanência na escola, combatendo desigualdades." },
+                { title: "II. Liberdade", detail: "Assegura a liberdade de aprender, ensinar, pesquisar e divulgar o pensamento, a arte e o saber." },
+                { title: "III. Pluralismo", detail: "Respeita a diversidade de ideias e concepções pedagógicas, permitindo a coexistência de escolas públicas e privadas." },
+                { title: "IV. Gratuidade", detail: "Estabelece que o ensino público em estabelecimentos oficiais deve ser gratuito para todos." },
+                { title: "V. Valorização Profissional", detail: "Promove a valorização dos profissionais da educação, com planos de carreira e ingresso por concurso público." },
+                { title: "VI. Gestão Democrática", detail: "Implementa a gestão democrática no ensino público, na forma da lei, com participação da comunidade." },
+                { title: "VII. Padrão de Qualidade", detail: "Assegura a garantia de um padrão mínimo de qualidade de ensino para todas as instituições." },
+                { title: "VIII. Piso Salarial Nacional", detail: "Define um piso salarial profissional nacional para os profissionais da educação escolar pública." },
+                { title: "IX. Aprendizagem ao Longo da Vida", detail: "Garante o direito à educação e à aprendizagem contínua, em todas as fases da vida." }
+            ];
+
+            const principlesGrid = document.getElementById('principles-grid');
+            principlesData.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'principle-card bg-white p-4 rounded-lg shadow-sm border-2 border-transparent cursor-pointer transition';
+                card.innerHTML = `
+                    <h4 class="font-bold text-md text-teal-800">${p.title}</h4>
+                    <div class="principle-detail text-sm text-slate-600 mt-2">
+                        <p>${p.detail}</p>
+                    </div>
+                `;
+                principlesGrid.appendChild(card);
+            });
+
+            const principleCards = document.querySelectorAll('.principle-card');
+            principleCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const isActive = card.classList.contains('active');
+                    principleCards.forEach(c => c.classList.remove('active'));
+                    if (!isActive) {
+                        card.classList.add('active');
+                    }
+                });
+            });
+
+            const ctx = document.getElementById('fundingChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['União', 'Estados, DF e Municípios'],
+                    datasets: [{
+                        label: 'Investimento Mínimo em Educação (% da Receita de Impostos)',
+                        data: [18, 25],
+                        backgroundColor: [
+                            'rgba(15, 118, 110, 0.7)', // teal-700
+                            'rgba(217, 119, 6, 0.7)'  // amber-600
+                        ],
+                        borderColor: [
+                            'rgb(15, 118, 110)',
+                            'rgb(217, 119, 6)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` Mínimo: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
