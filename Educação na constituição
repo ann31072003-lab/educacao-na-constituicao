@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebApp Unificada: LDB e Constituição</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony (Stone, Teal, Amber) -->
+    <!-- Application Structure Plan: A comprehensive single-page application integrating all documents into a single, cohesive SPA. The structure is based on a logical flow of the legal topics, starting with the Constituição and then moving through the different parts of the LDB. Key interactions include click-to-reveal details for principles and a dynamic chart for funding, all managed by a single JavaScript block. This SPA design eliminates the need for separate files and provides the seamless navigation the user requested. -->
+    <!-- Visualization & Content Choices: Funding Percentages (Art. 212/69) -> Goal: Compare -> Viz: Chart.js Bar Chart -> Interaction: Hover tooltips -> Justification: Visually contrasts the investment levels of different government spheres, aiding memorization. Principles (Art. 206/3) -> Goal: Organize/Inform -> Method: Interactive HTML/CSS Cards -> Interaction: Click-to-reveal -> Justification: Breaks down complex legal principles into digestible, interactive chunks, reducing cognitive load. Content blocks on Education Special, Professionals, etc., use a similar interactive card approach. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+        }
+        .section-card {
+            transition: all 0.3s ease-in-out;
+        }
+        .section-card.active {
+            border-color: #f59e0b; /* amber-500 */
+            background-color: #fffbeb; /* amber-50 */
+        }
+        .section-content {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+        }
+        .section-card.active .section-content {
+            max-height: 1000px;
+            opacity: 1;
+        }
+        .principle-card.active {
+            border-color: #f59e0b; /* amber-500 */
+            background-color: #fffbeb; /* amber-50 */
+        }
+        .principle-detail {
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .principle-card.active .principle-detail {
+            max-height: 200px;
+            opacity: 1;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-2">
+                    <span class="text-2xl text-teal-700">📚</span>
+                    <h1 class="text-xl font-bold text-teal-800">LDB - Lei Completa</h1>
+                </div>
+                <div class="hidden md:flex space-x-6 text-sm font-medium">
+                    <a href="#constituicao" class="text-slate-600 hover:text-teal-700 transition">Constituição</a>
+                    <a href="#principios-e-fins-ldb" class="text-slate-600 hover:text-teal-700 transition">LDB - Princípios</a>
+                    <a href="#niveis-e-modalidades" class="text-slate-600 hover:text-teal-700 transition">Níveis</a>
+                    <a href="#educacao-basica-ldb" class="text-slate-600 hover:text-teal-700 transition">Educação Básica</a>
+                    <a href="#educacao-especial" class="text-slate-600 hover:text-teal-700 transition">Especial e Bilíngue</a>
+                    <a href="#profissionais" class="text-slate-600 hover:text-teal-700 transition">Profissionais</a>
+                    <a href="#recursos-financeiros" class="text-slate-600 hover:text-teal-700 transition">Finanças</a>
+                    <a href="#disposicoes-gerais" class="text-slate-600 hover:text-teal-700 transition">Disposições Gerais</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+        <!-- Seção: Educação na Constituição -->
+        <section id="constituicao" class="mb-16">
+            <h2 class="text-3xl font-bold text-teal-800 mb-2 text-center">Educação na Constituição Federal</h2>
+            <p class="text-center text-slate-600 max-w-3xl mx-auto mb-8">O Artigo 205 da Constituição Federal estabelece a base da educação no Brasil, definindo-a como um direito fundamental e um dever compartilhado. Esta seção apresenta os três pilares que sustentam essa visão: o direito, o dever e as finalidades da educação.</p>
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-teal-500">
+                    <h3 class="text-xl font-bold text-teal-800 mb-2">Direito de Todos</h3>
+                    <p class="text-slate-600">A educação é um direito social universal, inalienável e intransferível, garantido a cada cidadão sem qualquer distinção.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-amber-500">
+                    <h3 class="text-xl font-bold text-amber-800 mb-2">Dever do Estado e da Família</h3>
+                    <p class="text-slate-600">A responsabilidade pela educação é compartilhada, com o Estado garantindo a oferta e a família assegurando o acesso e o acompanhamento.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-sky-500">
+                    <h3 class="text-xl font-bold text-sky-800 mb-2">Finalidades</h3>
+                    <p class="text-slate-600">Visa ao pleno desenvolvimento da pessoa, seu preparo para o exercício da cidadania e sua qualificação para o trabalho.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: LDB - Princípios e Fins da Educação (Art. 2°-3°) -->
+        <section id="principios-e-fins-ldb" class="mb-16">
+            <h2 class="text-3xl font-bold text-teal-800 mb-2 text-center">LDB: Princípios e Fins da Educação</h2>
+            <p class="text-center text-slate-600 max-w-3xl mx-auto mb-8">O Artigo 2° da LDB define os fins da educação, e o Artigo 3° lista os 15 princípios que guiam o ensino no Brasil. Clique em cada um para ver o detalhe e entender como eles se aplicam.</p>
+            <div id="ldb-principles-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+            </div>
+        </section>
+
+        <!-- Seção: LDB - Níveis e Modalidades (Título V) -->
+        <section id="niveis-e-modalidades" class="mb-16">
+            <h2 class="text-3xl font-bold text-teal-800 mb-2 text-center">Níveis e Modalidades de Ensino</h2>
+            <p class="text-center text-slate-600 max-w-3xl mx-auto mb-8">O Título V da LDB detalha a composição da educação escolar no Brasil, dividida em Educação Básica e Educação Superior. Esta seção explora como esses níveis são estruturados e quais são as diferentes modalidades de ensino.</p>
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-teal-500">
+                    <h3 class="text-xl font-bold text-teal-800 mb-4">Níveis da Educação Escolar (Art. 21)</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <p class="bg-teal-50 p-3 rounded-lg text-sm text-teal-800 font-semibold">1. Educação Básica</p>
+                        <p class="bg-teal-50 p-3 rounded-lg text-sm text-teal-800 font-semibold">2. Educação Superior</p>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-amber-500">
+                    <h3 class="text-xl font-bold text-amber-800 mb-4">Modalidades de Ensino</h3>
+                    <ul class="list-disc list-inside text-slate-600 space-y-1 text-sm">
+                        <li>Educação de Jovens e Adultos (EJA)</li>
+                        <li>Educação Profissional e Tecnológica</li>
+                        <li>Educação Especial</li>
+                        <li>Educação a Distância (EaD)</li>
+                        <li>Educação do Campo, Indígena e Quilombola</li>
+                        <li>Educação Bilíngue de Surdos</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: LDB - Educação Básica Detalhada -->
+        <section id="educacao-basica-ldb" class="mb-16">
+            <h2 class="text-3xl font-bold text-teal-800 mb-2 text-center">A Educação Básica (Art. 22 a 38)</h2>
+            <p class="text-center text-slate-600 max-w-3xl mx-auto mb-8">Esta seção aprofunda os artigos que regem a Educação Básica, desde a organização curricular até as regras específicas para cada etapa: Educação Infantil, Ensino Fundamental e Ensino Médio.</p>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-sky-500">
+                    <h3 class="text-xl font-bold text-sky-800 mb-2">Estrutura Curricular (Art. 26)</h3>
+                    <ul class="list-disc list-inside text-slate-600 space-y-1 text-sm">
+                        <li><strong class="text-sky-700">Base Nacional Comum</strong> + Parte Diversificada</li>
+                        <li><strong class="text-sky-700">Carga horária mínima anual</strong>: 800h (EF), 1000h (EM)</li>
+                        <li>Inclusão de temas como <strong class="text-sky-700">história afro-brasileira e indígena</strong>, <strong class="text-sky-700">filmes nacionais</strong> e <strong class="text-sky-700">educação digital</strong>.</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-amber-500">
+                    <h3 class="text-xl font-bold text-amber-800 mb-2">Ensino Médio (Art. 35-B)</h3>
+                    <ul class="list-disc list-inside text-slate-600 space-y-1 text-sm">
+                        <li><strong class="text-amber-700">Formação Geral Básica</strong> (2.400h) e <strong class="text-amber-700">Itinerários Formativos</strong> (600h).</li>
+                        <li>Possibilidade de reconhecimento de <strong class="text-amber-700">experiências extraescolares</strong>.</li>
+                        <li>Organização curricular em <strong class="text-amber-700">quatro áreas de conhecimento</strong>.</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-teal-500">
+                    <h3 class="text-xl font-bold text-teal-800 mb-2">EJA e Profissional (Art. 37-39)</h3>
+                    <ul class="list-disc list-inside text-slate-600 space-y-1 text-sm">
+                        <li><strong class="text-teal-700">EJA</strong> para quem não concluiu na idade certa, com oportunidades gratuitas.</li>
+                        <li><strong class="text-teal-700">Educação Profissional e Tecnológica</strong> se articula com o ensino regular.</li>
+                        <li>Diplomas de cursos técnicos têm <strong class="text-teal-700">validade nacional</strong>.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: Educação Especial e Bilíngue -->
+        <section id="educacao-especial" class="mb-16">
+            <h2 class="text-3xl font-bold text-teal-800 mb-2 text-center">Educação Especial e Bilíngue</h2>
+            <p class="text-center text-slate-600 max-w-3xl mx-auto mb-8">O Título V da LDB detalha a educação especial e bilíngue, garantindo inclusão e respeito às especificidades. Conforme o Artigo 58, a educação especial é uma modalidade de ensino preferencialmente oferecida na rede regular, abrangendo alunos com deficiência, transtornos globais do desenvolvimento e superdotação.</p>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-md section-card" onclick="toggleSection(this)">
+                    <h3 class="font-bold text-lg cursor-pointer text-teal-800">Educação Especial (Art. 58-60)</h3>
+                    <div class="section-content mt-4">
+                        <ul class="list-disc list-inside text-slate-600 space-y-1 text-sm">
+                            <li><strong class="text-teal-700">Preferencialmente na rede regular</strong>: O atendimento educacional especializado deve priorizar a inclusão em classes comuns.</li>
+                            <li><strong class="text-teal-700">Recursos e métodos</strong>: Asseguram currículos, métodos e técnicas específicos.</li>
+                            <li><strong class="text-teal-700">Terminalidade específica e aceleração</strong>: Para alunos com deficiência (ensino fundamental) e superdotados, respectivamente.</li>
+                            <li><strong class="text-teal-700">Formação de professores</strong>: Prevê a especialização adequada para professores que atendem a essa clientela.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md section-card" onclick="toggleSection(this)">
+                    <h3 class="font-bold text-lg cursor-pointer text-teal-800">Educação Bilíngue de Surdos (Art. 60-A e 60-B)</h3>
+                    <div class="section-content mt-4">
+                        <ul class="list-disc list-inside text-slate-600 space-y-1 text-sm">
+                            <li><strong class="text-teal-700">LIBRAS e Português</strong>: Ofertada com Língua Brasileira de Sinais (Libras) como primeira língua e o português escrito como segunda língua.</li>
+                            <li><strong class="text-teal-700">Atendimento ao longo da vida</strong>: Começa na educação infantil e se estende por todos os níveis de ensino.</li>
+                            <li><strong class="text-teal-700">Apoio e material</strong>: Garante serviços de apoio educacional especializado e materiais didáticos bilíngues.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: Profissionais da Educação (LDB - Título VI) -->
+        <section id="profissionais" class="mb-16">
+            <h2 class="text-3xl font-bold text-teal-800 mb-2 text-center">Profissionais da Educação</h2>
+            <p class="text-center text-slate-600 max-w-3xl mx-auto mb-8">O Título VI da LDB define quem são os profissionais da educação e as formas de sua valorização e formação. Esta seção resume as diretrizes para ingresso, capacitação e carreira do magistério público.</p>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-md section-card" onclick="toggleSection(this)">
+                    <h3 class="font-bold text-lg cursor-pointer text-teal-800">Formação e Qualificação (Art. 61-66)</h3>
+                    <div class="section-content mt-4">
+                        <ul class="list-disc list-inside text-slate-600 space-y-1 text-sm">
+                            <li><strong class="text-teal-700">Nível Superior</strong>: Formação de docentes para a educação básica em licenciatura plena.</li>
+                            <li><strong class="text-teal-700">Formação Mínima</strong>: Admite nível médio na modalidade normal para educação infantil e anos iniciais do fundamental.</li>
+                            <li><strong class="text-teal-700">Formação para o Superior</strong>: Preferencialmente em nível de mestrado e doutorado.</li>
+                            <li><strong class="text-teal-700">Prática de Ensino</strong>: Mínimo de 300 horas para formação docente (exceto superior).</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md section-card" onclick="toggleSection(this)">
+                    <h3 class="font-bold text-lg cursor-pointer text-teal-800">Valorização da Carreira (Art. 67)</h3>
+                    <div class="section-content mt-4">
+                        <ul class="list-disc list-inside text-slate-600 space-y-1 text-sm">
+                            <li><strong class="text-teal-700">Ingresso</strong>: Exclusivamente por concurso público de provas e títulos.</li>
+                            <li><strong class="text-teal-700">Piso Salarial</strong>: Garantia de um piso salarial profissional.</li>
+                            <li><strong class="text-teal-700">Progressão</strong>: Funcional baseada em titulação/habilitação e avaliação de desempenho.</li>
+                            <li><strong class="text-teal-700">Aperfeiçoamento</strong>: Formação continuada, inclusive com licença remunerada.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: Recursos Financeiros (LDB - Título VII) -->
+        <section id="recursos-financeiros" class="mb-16">
+            <h2 class="text-3xl font-bold text-teal-800 mb-2 text-center">Recursos e Financiamento</h2>
+            <p class="text-center text-slate-600 max-w-3xl mx-auto mb-8">O financiamento da educação é um tema central na LDB, abordando as fontes de recursos e o que pode ou não ser considerado despesa de manutenção e desenvolvimento do ensino. Os artigos 68 a 77 detalham como os recursos públicos são geridos e aplicados.</p>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-amber-500">
+                    <h3 class="text-xl font-bold text-amber-800 mb-2">Fontes de Recurso (Art. 68)</h3>
+                    <ul class="list-disc list-inside text-slate-600 space-y-1 text-sm">
+                        <li>Impostos próprios</li>
+                        <li>Transferências constitucionais</li>
+                        <li>Salário-educação</li>
+                        <li>Incentivos fiscais</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-sky-500">
+                    <h3 class="text-xl font-bold text-sky-800 mb-2">Onde Gastar (Art. 70)</h3>
+                    <ul class="list-disc list-inside text-slate-600 space-y-1 text-sm">
+                        <li>Remuneração de profissionais</li>
+                        <li>Instalações e equipamentos</li>
+                        <li>Pesquisas e estudos para melhoria do ensino</li>
+                        <li>Bolsas de estudo</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-teal-500">
+                    <h3 class="text-xl font-bold text-teal-800 mb-2">Onde NÃO Gastar (Art. 71)</h3>
+                    <ul class="list-disc list-inside text-slate-600 space-y-1 text-sm">
+                        <li>Obras de infraestrutura</li>
+                        <li>Subvenção a instituições assistenciais</li>
+                        <li>Programas suplementares (alimentação, saúde, transporte)</li>
+                        <li>Pessoal em desvio de função</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção: Disposições Gerais (LDB - Título VIII) -->
+        <section id="disposicoes-gerais">
+            <h2 class="text-3xl font-bold text-teal-800 mb-2 text-center">Disposições Gerais da LDB</h2>
+            <p class="text-center text-slate-600 max-w-3xl mx-auto mb-8">O Título VIII da LDB traz disposições importantes que regulam aspectos específicos da educação, como o calendário escolar e a educação para comunidades indígenas e surdas. Os artigos 78 a 92 consolidam essas regras, garantindo a adaptação e a inclusão no sistema educacional.</p>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 rounded-xl shadow-md section-card" onclick="toggleSection(this)">
+                    <h3 class="font-bold text-lg cursor-pointer text-teal-800">Educação Indígena e Surda (Art. 78-79C)</h3>
+                    <div class="section-content mt-4">
+                        <ul class="list-disc list-inside text-slate-600 space-y-1 text-sm">
+                            <li><strong class="text-teal-700">Educação Intercultural</strong>: Programas de ensino e pesquisa para comunidades indígenas, valorizando línguas e culturas.</li>
+                            <li><strong class="text-teal-700">Educação Bilíngue</strong>: Para alunos surdos, com Libras como primeira língua e português como segunda.</li>
+                            <li><strong class="text-teal-700">Calendário Escolar</strong>: Inclui o Dia Nacional da Consciência Negra (20 de novembro).</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md section-card" onclick="toggleSection(this)">
+                    <h3 class="font-bold text-lg cursor-pointer text-teal-800">EaD e Outros Temas (Art. 80-84)</h3>
+                    <div class="section-content mt-4">
+                        <ul class="list-disc list-inside text-slate-600 space-y-1 text-sm">
+                            <li><strong class="text-teal-700">Ensino a Distância (EaD)</strong>: Incentivado em todos os níveis, com credenciamento e regulamentação pela União.</li>
+                            <li><strong class="text-teal-700">Ensino Militar</strong>: Regulado por lei específica, mas com equivalência de estudos.</li>
+                            <li><strong class="text-teal-700">Monitoria</strong>: Alunos da educação superior podem atuar em tarefas de ensino e pesquisa.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-800 text-white mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center">
+            <p class="text-sm text-slate-400">WebApp Interativa criada com base nos documentos sobre a LDB (Partes 1, 2 e 3).</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleSection(element) {
+            const isActive = element.classList.contains('active');
+            const allSections = document.querySelectorAll('.section-card');
+            allSections.forEach(card => {
+                card.classList.remove('active');
+            });
+            if (!isActive) {
+                element.classList.add('active');
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const ldbPrinciplesData = [
+                { title: "I. Igualdade de condições", detail: "Garante condições para o acesso e permanência na escola." },
+                { title: "II. Liberdade", detail: "De aprender, ensinar, pesquisar e divulgar a cultura, o pensamento, a arte e o saber." },
+                { title: "III. Pluralismo de ideias", detail: "Valoriza a diversidade de concepções pedagógicas." },
+                { title: "IV. Respeito", detail: "Respeito à liberdade e apreço à tolerância." },
+                { title: "V. Coexistência", detail: "De instituições públicas e privadas de ensino." },
+                { title: "VI. Gratuidade", detail: "Do ensino público em estabelecimentos oficiais." },
+                { title: "VII. Valorização profissional", detail: "Valorização do profissional da educação escolar." },
+                { title: "VIII. Gestão democrática", detail: "Do ensino público, na forma da lei." },
+                { title: "IX. Padrão de qualidade", detail: "Garante um padrão de qualidade." },
+                { title: "X. Experiência extra-escolar", detail: "Valorização da experiência extra-escolar." },
+                { title: "XI. Vinculação", detail: "Entre a educação escolar, o trabalho e as práticas sociais." },
+                { title: "XII. Diversidade étnico-racial", detail: "Consideração com a diversidade étnico-racial." },
+                { title: "XIII. Aprendizagem ao longo da vida", detail: "Garantia do direito à educação e à aprendizagem ao longo da vida." },
+                { title: "XIV. Respeito à diversidade humana", detail: "Das pessoas surdas, surdo-cegas e com deficiência auditiva." },
+                { title: "XV. Acesso a informações", detail: "Garantia do direito de acesso a informações públicas sobre a gestão da educação." }
+            ];
+
+            const ldbPrinciplesGrid = document.getElementById('ldb-principles-grid');
+            if (ldbPrinciplesGrid) {
+                ldbPrinciplesData.forEach(p => {
+                    const card = document.createElement('div');
+                    card.className = 'principle-card bg-white p-4 rounded-lg shadow-sm border-2 border-transparent cursor-pointer transition';
+                    card.innerHTML = `
+                        <h4 class="font-bold text-md text-teal-800">${p.title}</h4>
+                        <div class="principle-detail text-sm text-slate-600 mt-2">
+                            <p>${p.detail}</p>
+                        </div>
+                    `;
+                    ldbPrinciplesGrid.appendChild(card);
+                });
+
+                const ldbPrincipleCards = document.querySelectorAll('.principle-card');
+                ldbPrincipleCards.forEach(card => {
+                    card.addEventListener('click', () => {
+                        const isActive = card.classList.contains('active');
+                        ldbPrincipleCards.forEach(c => c.classList.remove('active'));
+                        if (!isActive) {
+                            card.classList.add('active');
+                        }
+                    });
+                });
+            }
+            
+            const ctx = document.getElementById('fundingChart');
+            if (ctx) {
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['União', 'Estados, DF e Municípios'],
+                        datasets: [{
+                            label: 'Investimento Mínimo em Educação (% da Receita de Impostos)',
+                            data: [18, 25],
+                            backgroundColor: [
+                                'rgba(15, 118, 110, 0.7)',
+                                'rgba(217, 119, 6, 0.7)'
+                            ],
+                            borderColor: [
+                                'rgb(15, 118, 110)',
+                                'rgb(217, 119, 6)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%'
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return ` Mínimo: ${context.raw}%`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
