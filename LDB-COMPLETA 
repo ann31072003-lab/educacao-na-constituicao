@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebApp Interativa: LDB Completa</title>
+    <!-- Inclui o Tailwind CSS via CDN para estilização rápida e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Define a fonte padrão Inter para a página */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            @apply bg-gray-100 text-gray-800;
+        }
+        /* Estilo para a barra de rolagem (opcional, para um visual mais limpo) */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col items-center p-4 md:p-8">
+
+    <!-- Container principal da aplicação -->
+    <div class="w-full max-w-4xl bg-white rounded-xl shadow-lg p-6 md:p-8">
+
+        <!-- Título e introdução -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-teal-600 mb-2">LDB em Foco</h1>
+            <p class="text-lg text-gray-600">
+                Uma aplicação interativa para explorar a Lei de Diretrizes e Bases da Educação Nacional.
+            </p>
+        </header>
+
+        <!-- Seções de conteúdo colapsáveis (usando o elemento <details> para simplicidade) -->
+        <main>
+            <!-- Seção: Níveis e Modalidades de Ensino -->
+            <details class="mb-4 bg-white rounded-lg shadow-md overflow-hidden">
+                <summary class="flex justify-between items-center cursor-pointer p-4 font-semibold text-lg text-gray-700 bg-amber-100 hover:bg-amber-200 transition-colors duration-300 rounded-lg">
+                    Níveis e Modalidades
+                    <span class="text-xl transform transition-transform duration-300">▼</span>
+                </summary>
+                <div class="p-6 text-gray-600">
+                    <p class="mb-4">
+                        Aqui você pode detalhar os artigos e as disposições sobre a Educação Básica (Educação Infantil, Ensino Fundamental e Médio) e a Educação Superior, além de modalidades como EJA e Educação a Distância.
+                    </p>
+                    <a href="#" class="text-amber-600 hover:underline">Saiba mais sobre Níveis e Modalidades</a>
+                </div>
+            </details>
+
+            <!-- Seção: Educação Especial -->
+            <details class="mb-4 bg-white rounded-lg shadow-md overflow-hidden">
+                <summary class="flex justify-between items-center cursor-pointer p-4 font-semibold text-lg text-gray-700 bg-teal-100 hover:bg-teal-200 transition-colors duration-300 rounded-lg">
+                    Educação Especial
+                    <span class="text-xl transform transition-transform duration-300">▼</span>
+                </summary>
+                <div class="p-6 text-gray-600">
+                    <p class="mb-4">
+                        Esta seção aborda as diretrizes para a educação de pessoas com deficiência, transtornos globais do desenvolvimento e altas habilidades ou superdotação.
+                    </p>
+                    <a href="#" class="text-teal-600 hover:underline">Saiba mais sobre Educação Especial</a>
+                </div>
+            </details>
+
+            <!-- Seção: Profissionais da Educação -->
+            <details class="mb-4 bg-white rounded-lg shadow-md overflow-hidden">
+                <summary class="flex justify-between items-center cursor-pointer p-4 font-semibold text-lg text-gray-700 bg-red-100 hover:bg-red-200 transition-colors duration-300 rounded-lg">
+                    Profissionais da Educação
+                    <span class="text-xl transform transition-transform duration-300">▼</span>
+                </summary>
+                <div class="p-6 text-gray-600">
+                    <p class="mb-4">
+                        Aqui são apresentadas as informações sobre a formação, valorização e remuneração dos profissionais da educação escolar básica.
+                    </p>
+                    <a href="#" class="text-red-600 hover:underline">Saiba mais sobre Profissionais da Educação</a>
+                </div>
+            </details>
+
+            <!-- Seção: Recursos Financeiros -->
+            <details class="mb-4 bg-white rounded-lg shadow-md overflow-hidden">
+                <summary class="flex justify-between items-center cursor-pointer p-4 font-semibold text-lg text-gray-700 bg-violet-100 hover:bg-violet-200 transition-colors duration-300 rounded-lg">
+                    Recursos Financeiros
+                    <span class="text-xl transform transition-transform duration-300">▼</span>
+                </summary>
+                <div class="p-6 text-gray-600">
+                    <p class="mb-4">
+                        Esta parte da LDB trata do financiamento da educação pública, estabelecendo percentuais de investimento e a distribuição de recursos.
+                    </p>
+                    <a href="#" class="text-violet-600 hover:underline">Saiba mais sobre Recursos Financeiros</a>
+                </div>
+            </details>
+
+            <!-- Seção: Disposições Gerais -->
+            <details class="mb-4 bg-white rounded-lg shadow-md overflow-hidden">
+                <summary class="flex justify-between items-center cursor-pointer p-4 font-semibold text-lg text-gray-700 bg-blue-100 hover:bg-blue-200 transition-colors duration-300 rounded-lg">
+                    Disposições Gerais
+                    <span class="text-xl transform transition-transform duration-300">▼</span>
+                </summary>
+                <div class="p-6 text-gray-600">
+                    <p class="mb-4">
+                        Esta seção abrange os princípios e fins da educação nacional, o dever do Estado e da família com a educação, entre outros pontos introdutórios.
+                    </p>
+                    <a href="#" class="text-blue-600 hover:underline">Saiba mais sobre Disposições Gerais</a>
+                </div>
+            </details>
+        </main>
+    </div>
+</body>
+</html>
